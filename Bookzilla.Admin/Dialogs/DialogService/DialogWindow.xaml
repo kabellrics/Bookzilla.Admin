@@ -1,0 +1,23 @@
+﻿<Window x:Class="Bookzilla.Admin.Dialogs.DialogService.DialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bookzilla.Admin.Dialogs.DialogService"
+        xmlns:AddCollection="clr-namespace:Bookzilla.Admin.Dialogs.AddCollectionDialog"
+        xmlns:InfoDialog="clr-namespace:Bookzilla.Admin.Dialogs.InfoDialog"
+        mc:Ignorable="d"
+        Title="DialogWindow"  SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type AddCollection:AddCollectionViewModel}">
+            <AddCollection:AddCollectionView></AddCollection:AddCollectionView>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type InfoDialog:InfoViewModel}">
+            <InfoDialog:InfoDialog></InfoDialog:InfoDialog>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <ContentPresenter x:Name="ContentPresenter" Content="{Binding}"></ContentPresenter>
+    </Grid>
+</Window>

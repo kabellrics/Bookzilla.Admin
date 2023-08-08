@@ -1,0 +1,122 @@
+﻿<Page
+    x:Class="Bookzilla.Admin.Views.CollectionListDetailPage"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:helpers="clr-namespace:Bookzilla.Admin.Helpers"
+    xmlns:properties="clr-namespace:Bookzilla.Admin.Properties"
+    xmlns:behaviors="clr-namespace:Bookzilla.Admin.Behaviors"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="CollectionGridTemplate">
+            <materialDesign:Card Width="622" Margin="5">
+                <Grid>
+                    <Border>
+                        <Image Source="{Binding Illustration}" Stretch="Fill" Height="350" Width="622"></Image>
+                    </Border>
+                    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                Background="{DynamicResource MahApps.Brushes.Gray10}">
+                        <TextBlock
+                        FontSize="24"
+                        Text="{Binding Name}"
+                        HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                        Style="{StaticResource BodyTextStyle}"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+        </DataTemplate>
+        <DataTemplate x:Key="PublicationGridTemplate">
+            <materialDesign:Card Width="233" Margin="5">
+                <Grid>
+                    <Border>
+                        <Image Source="{Binding Illustration}" Stretch="Fill" Height="350" Width="233"></Image>
+                    </Border>
+                    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                Background="{DynamicResource MahApps.Brushes.Gray10}">
+                        <TextBlock
+                        FontSize="24"
+                        Text="{Binding Name}"
+                        HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                        Style="{StaticResource BodyTextStyle}"
+                        TextAlignment="Center"
+                        TextWrapping="WrapWithOverflow"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+        </DataTemplate>
+        <helpers:CollecPubliTemplateSelector x:Key="TemplateSelector"
+                                             CollectionTemplate="{StaticResource CollectionGridTemplate}"
+                                             PublicationTemplate="{StaticResource PublicationGridTemplate}"/>
+    </Page.Resources>
+    <Grid>
+        <ScrollViewer
+            x:Name="contentScroll"
+            IsTabStop="True">
+            <StackPanel
+                Margin="{StaticResource MediumLeftTopRightBottomMargin}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid
+                        Width="800"
+                        Height="450"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Background="{DynamicResource MahApps.Brushes.Gray10}"
+                        VerticalAlignment="Top">
+                        <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Command="{Binding ChangeImgCommand}">
+                            <Image Source="{Binding FanartTmpPath,Mode=OneWay}" Stretch="Fill" Height="450" Width="800"></Image>
+                        </Button>
+                    </Grid>
+                    <StackPanel
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="5">
+                        <TextBlock
+                            Margin="{StaticResource SmallLeftMargin}"
+                            Style="{StaticResource PageTitleStyle}"
+                            Text="{Binding Item.Name}"
+                            HorizontalAlignment="Center"
+                            FontSize="50" />
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Chemin de l'Image" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.FanartPath}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Hierarchie :" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Hierarchie}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
+                                Command="{Binding SaveCommand}">
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Enregistrer Les Changements" />
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+                <ListView
+            Margin="{StaticResource SmallLeftMargin}"
+            SelectionMode="Single"
+            ItemsSource="{Binding Childs}"
+            ItemTemplateSelector="{StaticResource TemplateSelector}"
+            Style="{StaticResource ContentGridListViewStyle}">
+                    <i:Interaction.Behaviors>
+                        <behaviors:ListViewItemSelectionBehavior Command="{Binding NavigateToDetailCommand}" />
+                    </i:Interaction.Behaviors>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

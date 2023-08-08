@@ -1,0 +1,121 @@
+﻿<Page xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
+    x:Class="Bookzilla.Admin.Views.TomeListDetailPage"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ScrollViewer
+            x:Name="contentScroll"
+            IsTabStop="True">
+            <StackPanel
+                Margin="{StaticResource MediumLeftTopRightBottomMargin}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid
+                        Width="400"
+                        Height="600"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Background="{DynamicResource MahApps.Brushes.Gray10}"
+                        VerticalAlignment="Top">
+                            <Image Source="{Binding Item.Illustration,Mode=OneWay}" Stretch="Fill" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            </Image>
+                    </Grid>
+                    <StackPanel
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="5">
+                        <TextBlock
+                            Margin="{StaticResource SmallLeftMargin}"
+                            Style="{StaticResource PageTitleStyle}"
+                            Text="{Binding Item.Name}"
+                            HorizontalAlignment="Center"
+                            FontSize="50"/>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Id de la Publication" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.PublicationId}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Favoris" />
+                            <CheckBox Style="{StaticResource MahApps.Styles.CheckBox.Win10}" IsChecked="{Binding Item.IsFavorite,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                      Content="Favori" IsEnabled="True"/>
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Numéro" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.OrderInPublication}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Page Actuelle" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.CurrentPage}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Statut" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.ReadingStatus}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Taille" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.Size}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Chemin de l'Image" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.CoverPath}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
+                                Command="{Binding SaveCommand}">
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Enregistrer Les Changements" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
+                                Command="{Binding LoadImgCommand}">
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Extraire la Cover" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left" IsEnabled="{Binding Item.CanOverridePubliCover}"
+                                Command="{Binding OverrideImgCommand}">
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Utiliser la Cover pour la publication" />
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <!--<TextBlock
+                    Margin="{StaticResource MediumTopMargin}"
+                    Style="{StaticResource SubtitleTextStyle}"
+                    Text="Note 1" />
+                <TextBlock
+                    Style="{StaticResource BodyTextStyle}"
+                    Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis quis hendrerit nulla, vel molestie libero. In nec ultricies magna, ultricies molestie ipsum. Mauris non dignissim velit. Etiam malesuada blandit mauris eu maximus. Quisque ornare, felis nec scelerisque mollis, risus dolor posuere magna, in gravida quam mi id nisi. Nullam mattis consequat ex. Cras nulla neque, dictum ac urna et, vestibulum feugiat ex. Pellentesque malesuada accumsan ligula, vel fringilla lacus facilisis sit amet. Proin convallis tempor arcu, ac placerat libero pretium ut. Praesent hendrerit nisl at lobortis viverra. Fusce vitae velit odio. Nam ut tortor sed purus finibus sollicitudin quis at ante. Ut sodales dolor vel eros mollis suscipit. Donec eu nulla id urna ultricies consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;" />
+
+                <TextBlock
+                    Margin="{StaticResource MediumTopMargin}"
+                    Style="{StaticResource SubtitleTextStyle}"
+                    Text="Note 2" />
+                <TextBlock
+                    Margin="{StaticResource MediumBottomMargin}"
+                    Style="{StaticResource BodyTextStyle}"
+                    Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis quis hendrerit nulla, vel molestie libero. In nec ultricies magna, ultricies molestie ipsum. Mauris non dignissim velit. Etiam malesuada blandit mauris eu maximus. Quisque ornare, felis nec scelerisque mollis, risus dolor posuere magna, in gravida quam mi id nisi. Nullam mattis consequat ex. Cras nulla neque, dictum ac urna et, vestibulum feugiat ex. Pellentesque malesuada accumsan ligula, vel fringilla lacus facilisis sit amet. Proin convallis tempor arcu, ac placerat libero pretium ut. Praesent hendrerit nisl at lobortis viverra. Fusce vitae velit odio. Nam ut tortor sed purus finibus sollicitudin quis at ante. Ut sodales dolor vel eros mollis suscipit. Donec eu nulla id urna ultricies consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;" />-->
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
