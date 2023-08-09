@@ -166,6 +166,7 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
         using (var client = new System.Net.Http.HttpClient())
         {
             var ext = Path.GetExtension(item.FilePath);
+            Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp"));
             var tmpfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla","temp", $"tmpfile{ext}");
             var url = Path.Combine($"http://192.168.1.17:800{item.FilePath}");
             //client.(url, tmpfile);
