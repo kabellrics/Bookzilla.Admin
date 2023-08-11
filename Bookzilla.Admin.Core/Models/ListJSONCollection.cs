@@ -19,4 +19,9 @@ namespace Bookzilla.Admin.Core.Models
         public List<Tome> body { get; set; }
         public int itemCount { get; set; }
     }
+    public class ListJSONParam
+    {
+        public List<Param> body { get; set; }
+        public int itemCount { get; set; }
+    }
 }

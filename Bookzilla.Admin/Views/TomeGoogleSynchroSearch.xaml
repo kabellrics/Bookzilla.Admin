@@ -1,0 +1,53 @@
+﻿<Page xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
+      x:Class="Bookzilla.Admin.Views.TomeGoogleSynchroSearch"
+    Style="{DynamicResource MahApps.Styles.Page}"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Bookzilla.Admin.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="TomeGoogleSynchroSearch">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0"
+                            Margin="{StaticResource SmallLeftTopMargin}">
+            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Recherche pour " />
+            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="{Binding Item.Name}" />
+        </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Source}"
+                   AutoGenerateColumns="False" RowHeight="150">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Binding="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="Google Id" Binding="{Binding GoogleId}" MaxWidth="200"/>
+                <DataGridTextColumn Header="Titre" Binding="{Binding Title}" MaxWidth="300" />
+                <DataGridTextColumn Header="Auteurs" Binding="{Binding Authors}" MaxWidth="300" />
+                <DataGridTextColumn Header="Date de Publication" Binding="{Binding PublishedDate}" />
+                <!--<DataGridTextColumn Header="Description" Binding="{Binding Description}" MaxWidth="400" />-->
+                <DataGridTemplateColumn Header="Description" MaxWidth="400">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" TextAlignment="Justify"></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="ISBN_10" Binding="{Binding ISBN_10}" />
+                <DataGridTextColumn Header="ISBN_13" Binding="{Binding ISBN_13}" />
+                <DataGridTemplateColumn Header="Image" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ImagePath}" Stretch="Uniform" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            </Image>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

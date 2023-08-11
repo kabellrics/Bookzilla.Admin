@@ -1,4 +1,5 @@
-﻿using Bookzilla.Admin.Contracts.ViewModels;
+﻿using Bookzilla.Admin.Contracts.Services;
+using Bookzilla.Admin.Contracts.ViewModels;
 using Bookzilla.Admin.Core.Contracts.Services;
 using Bookzilla.Admin.Core.Models;
 using Bookzilla.Admin.Dialogs.DialogService;
@@ -17,13 +18,17 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
     private readonly DialogService _dialogService;
     private readonly IPublicationAPIClient _publicationService;
     private readonly ICoverExtractor _coverExtractor;
+    private readonly INavigationService _navigationService;
     private ICommand _LoadImgCommand;
     private ICommand _OverrideImgCommand;
     private ICommand _SaveCommand;
+    private ICommand _GoogleSearchCommand;
     //private ICommand _SaveCommand;
     public ICommand LoadImgCommand => _LoadImgCommand ?? (_LoadImgCommand = new RelayCommand(LoadImg));
     public ICommand OverrideImgCommand => _OverrideImgCommand ?? (_OverrideImgCommand = new RelayCommand(OverrideImg));
     public ICommand SaveCommand => _SaveCommand ?? (_SaveCommand = new RelayCommand<IObsToShow>(Save));
+    public ICommand GoogleSearchCommand => _GoogleSearchCommand ?? (_GoogleSearchCommand = new RelayCommand(GoogleSearch));
+
 
     private ObsTome _item;
 
@@ -32,12 +37,13 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
         get { return _item; }
         set { SetProperty(ref _item, value); }
     }
-    public TomeListDetailViewModel(IPublicationAPIClient publicationService, DialogService dialogService, ITomeAPIClient tomeService, ICoverExtractor coverExtractor)
+    public TomeListDetailViewModel(IPublicationAPIClient publicationService, DialogService dialogService, ITomeAPIClient tomeService, ICoverExtractor coverExtractor, INavigationService navigationService)
     {
         _publicationService = publicationService;
         _tomeService = tomeService;
         _dialogService = dialogService;
         _coverExtractor = coverExtractor;
+        _navigationService = navigationService;
     }
 
     public async void OnNavigatedTo(object parameter)
@@ -50,6 +56,10 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
         {
             Item = new ObsTome(await _tomeService.GetTomeByID(ID));
         }
+    }
+    private void GoogleSearch()
+    {
+        _navigationService.NavigateTo(typeof(TomeGoogleSynchroSearchViewModel).FullName, Item);
     }
     public void OnNavigatedFrom()
     {
@@ -65,7 +75,8 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
         using (var client = new WebClient())
         {
             var ext = Path.GetExtension(Item.FilePath);
-            var tmpfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp", $"tmpfile{ext}");
+            Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp"));
+            var tmpfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp", $"{Guid.NewGuid()}{ext}");
             var url = Path.Combine($"http://192.168.1.17:800{Item.FilePath}");
             client.DownloadFile(url, tmpfile);
             var tmpcover = _coverExtractor.GetCoverStream(tmpfile);
@@ -74,6 +85,7 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
             //File.Delete(tmpcover);
         }
         await InitValue(Item.Id);
+        Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp"), true);
     }
     private async void Save(IObsToShow obj)
     {

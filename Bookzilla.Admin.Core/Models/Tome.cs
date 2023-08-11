@@ -18,6 +18,12 @@ namespace Bookzilla.Admin.Core.Models
         public string IsFavorite;
         public string IsEpub;
         public string CFI_EPUB;
+        public string GoogleBookId;
+        public string Auteur;
+        public string Description;
+        public string PublicationDate;
+        public string ISBN_10;
+        public string ISBN_13;
     }
     public class CreateTome
     {
@@ -31,7 +37,7 @@ namespace Bookzilla.Admin.Core.Models
             public string rank { get; set; }
             public string publicationId { get; set; }
             public string Name { get; set; }
-            public string IsEpub { get;set; }
+            public string IsEpub { get; set; }
         }
     }
 }

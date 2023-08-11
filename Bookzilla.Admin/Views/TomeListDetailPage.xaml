@@ -96,6 +96,13 @@
                                 <TextBlock Style="{StaticResource BodyTextStyle}" Text="Utiliser la Cover pour la publication" />
                             </Button>
                         </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
+                                Command="{Binding GoogleSearchCommand}">
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Rechercher des Infos sur Google Book" />
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
 

@@ -92,6 +92,48 @@ namespace Bookzilla.Admin.ViewModels.ObservableObj
                 SetProperty(Tome.IsFavorite, valuetosave, Tome, (syteme, item) => Tome.IsFavorite = item);
             }
         }
+        public bool IsEpub
+        {
+            get => Tome.IsEpub == "1";
+            set
+            {
+                var valuetosave = value ? "1":"0"; 
+                SetProperty(Tome.IsEpub, valuetosave, Tome, (syteme, item) => Tome.IsEpub = item);
+            }
+        }
+
+        public string GoogleBookId
+        {
+            get => Tome.GoogleBookId;
+            set
+            {
+                SetProperty(Tome.GoogleBookId, value, Tome, (syteme, item) => Tome.GoogleBookId = item);
+            }
+        }
+        public string Auteur
+        {
+            get => Tome.Auteur;
+            set
+            {
+                SetProperty(Tome.Auteur, value, Tome, (syteme, item) => Tome.Auteur = item);
+            }
+        }
+        public string Description
+        {
+            get => Tome.Description;
+            set
+            {
+                SetProperty(Tome.Description, value, Tome, (syteme, item) => Tome.Description = item);
+            }
+        }
+        public string PublicationDate
+        {
+            get => Tome.PublicationDate;
+            set
+            {
+                SetProperty(Tome.PublicationDate, value, Tome, (syteme, item) => Tome.PublicationDate = item);
+            }
+        }
         public string ReadingStatus
         {
             get => ((ReadingStatus)Tome.ReadingStatusId).ToString("D");

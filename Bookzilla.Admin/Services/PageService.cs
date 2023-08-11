@@ -23,6 +23,7 @@ public class PageService : IPageService
         Configure<PublicationListDetailViewModel, PublicationListDetailPage>();
         Configure<TomeListViewModel, TomeListPage>();
         Configure<TomeListDetailViewModel, TomeListDetailPage>();
+        Configure<TomeGoogleSynchroSearchViewModel, TomeGoogleSynchroSearch>();
         Configure<SettingsViewModel, SettingsPage>();
     }
 

@@ -99,6 +99,8 @@ public partial class App : Application
         services.AddSingleton<ICollectionAPIClient, CollectionAPIClient>();
         services.AddSingleton<IPublicationAPIClient, PublicationAPIClient>();
         services.AddSingleton<ITomeAPIClient, TomeAPIClient>();
+        services.AddSingleton<IParamAPIClient, ParamAPIClient>();
+        services.AddSingleton<IGoogleBookAPIClient, GoogleBookAPIClient>();
         services.AddSingleton<ICoverExtractor, CoverExtractor>();
         services.AddSingleton<IPersistAndRestoreService, PersistAndRestoreService>();
         services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
@@ -134,6 +136,10 @@ public partial class App : Application
 
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<SettingsPage>();
+
+        services.AddTransient<TomeGoogleSynchroSearchViewModel>();
+        services.AddTransient<TomeGoogleSynchroSearch>();
+
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));

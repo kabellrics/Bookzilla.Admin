@@ -15,6 +15,7 @@ using System.Net.Http;
 using System.Security.Policy;
 using System.Windows.Input;
 using Windows.Web.Http;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Bookzilla.Admin.ViewModels;
 
@@ -146,9 +147,11 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
             var tome = new CreateTome(new Tome() { OrderInPublication = ind, PublicationId = Item.Id, Name = Path.GetFileNameWithoutExtension(file),IsEpub = isEpub });
             var t = Task.Run(async ()=> await SendFile(file, tome));
             var result = await Task.WhenAll(t);
-            _dialogService.ShowInfo(result[0]);
+            if(!result[0].Contains("successfully"))
+                _dialogService.ShowInfo(result[0]);
             ind++;
         }
+        _dialogService.ShowInfo("Fin du traitement");
         await InitValue(Item.Id);
     }
     private async void ExtractCovers()
@@ -156,9 +159,15 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
         foreach(var item in Childs)
         {
             var t = Task.Run(async () => await LoadCover(item));
-            var result = await Task.WhenAll(t);
+            var result = await Task.WhenAll(t);//.ContinueWith(x=> 
+            //{
+            //    Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp"), true);
+            //    return x;
+            //});
         }
+        _dialogService.ShowInfo("Fin du traitement");
         await InitValue(Item.Id);
+        Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp"), true);
     }
 
     private async Task<string> LoadCover(ObsTome item)
@@ -166,7 +175,8 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
         using (var client = new System.Net.Http.HttpClient())
         {
             var ext = Path.GetExtension(item.FilePath);
-            var tmpfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla","temp", $"tmpfile{ext}");
+            Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp"));
+            var tmpfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla","temp", $"{Guid.NewGuid()}{ext}");
             var url = Path.Combine($"http://192.168.1.17:800{item.FilePath}");
             //client.(url, tmpfile);
             var response = await client.GetAsync(url);

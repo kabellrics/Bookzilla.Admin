@@ -93,7 +93,7 @@
                             <materialDesign:Card Width="233" Margin="5">
                                 <Grid>
                                     <Border>
-                                        <Image Source="{Binding Illustration}" Stretch="Fill" Height="350" Width="233"></Image>
+                                        <Image Source="{Binding Illustration}" Stretch="Uniform" Height="350" Width="233"></Image>
                                     </Border>
                                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
                                         <!--Background="{DynamicResource MahApps.Brushes.Gray10}">-->
