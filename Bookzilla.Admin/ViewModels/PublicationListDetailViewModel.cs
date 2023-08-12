@@ -187,7 +187,11 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
             ms.CopyTo(fs);
             fs.Close(); ms.Close();
             var tmpcover = _coverExtractor.GetCoverStream(tmpfile);
-            return await _tomeService.PostCoverTome(tmpcover, item.Id, item.PublicationId);
+            if (tmpcover != null)
+            {
+                return await _tomeService.PostCoverTome(tmpcover, item.Id, item.PublicationId); 
+            }
+            return null;
         }
     }
 

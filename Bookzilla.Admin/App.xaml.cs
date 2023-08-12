@@ -140,6 +140,9 @@ public partial class App : Application
         services.AddTransient<TomeGoogleSynchroSearchViewModel>();
         services.AddTransient<TomeGoogleSynchroSearch>();
 
+        services.AddTransient<TomeGooglereconcileViewModel>();
+        services.AddTransient<TomeGooglereconcilePage>();
+
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));

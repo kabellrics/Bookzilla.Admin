@@ -24,6 +24,7 @@ public class PageService : IPageService
         Configure<TomeListViewModel, TomeListPage>();
         Configure<TomeListDetailViewModel, TomeListDetailPage>();
         Configure<TomeGoogleSynchroSearchViewModel, TomeGoogleSynchroSearch>();
+        Configure<TomeGooglereconcileViewModel, TomeGooglereconcilePage>();
         Configure<SettingsViewModel, SettingsPage>();
     }
 

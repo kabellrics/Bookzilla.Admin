@@ -71,7 +71,7 @@ namespace Bookzilla.Admin.Core.Services
                 googleBook.GoogleId = rawdata.id;
                 googleBook.Title = rawdata.volumeInfo.title;
                 if(rawdata.volumeInfo.authors != null)
-                googleBook.Authors = string.Join(",", rawdata.volumeInfo?.authors);
+                googleBook.Authors = string.Join(", ", rawdata.volumeInfo?.authors);
                 googleBook.PublishedDate = rawdata.volumeInfo?.publishedDate;
                 if (rawdata.volumeInfo?.description != null)
                 {
@@ -82,8 +82,8 @@ namespace Bookzilla.Admin.Core.Services
                 //googleBook.Description = rawdata.volumeInfo?.description;
                 if (rawdata.volumeInfo.industryIdentifiers != null)
                 {
-                    googleBook.ISBN_10 = rawdata.volumeInfo?.industryIdentifiers.FirstOrDefault(x => x.type == "ISBN_10").identifier;
-                    googleBook.ISBN_13 = rawdata.volumeInfo?.industryIdentifiers.FirstOrDefault(x => x.type == "ISBN_13").identifier;
+                    googleBook.ISBN_10 = rawdata.volumeInfo?.industryIdentifiers.FirstOrDefault(x => x.type == "ISBN_10")?.identifier;
+                    googleBook.ISBN_13 = rawdata.volumeInfo?.industryIdentifiers.FirstOrDefault(x => x.type == "ISBN_13")?.identifier;
                 }
                 if (rawdata.volumeInfo.imageLinks != null)
                 {

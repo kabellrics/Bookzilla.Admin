@@ -134,6 +134,22 @@ namespace Bookzilla.Admin.ViewModels.ObservableObj
                 SetProperty(Tome.PublicationDate, value, Tome, (syteme, item) => Tome.PublicationDate = item);
             }
         }
+        public string ISBN_10
+        {
+            get => Tome.ISBN_10;
+            set
+            {
+                SetProperty(Tome.ISBN_10, value, Tome, (syteme, item) => Tome.ISBN_10 = item);
+            }
+        }
+        public string ISBN_13
+        {
+            get => Tome.ISBN_13;
+            set
+            {
+                SetProperty(Tome.ISBN_13, value, Tome, (syteme, item) => Tome.ISBN_13 = item);
+            }
+        }
         public string ReadingStatus
         {
             get => ((ReadingStatus)Tome.ReadingStatusId).ToString("D");

@@ -14,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0"
@@ -21,25 +22,27 @@
             <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Recherche pour " />
             <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="{Binding Item.Name}" />
         </StackPanel>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Source}"
-                   AutoGenerateColumns="False" RowHeight="150">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Source}" SelectionMode="Single" Style="{StaticResource MahApps.Styles.DataGrid.Azure}"
+                   AutoGenerateColumns="False" RowHeight="150" SelectedItem="{Binding Selectedbook,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Binding="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
-                <DataGridTextColumn Header="Google Id" Binding="{Binding GoogleId}" MaxWidth="200"/>
-                <DataGridTextColumn Header="Titre" Binding="{Binding Title}" MaxWidth="300" />
-                <DataGridTextColumn Header="Auteurs" Binding="{Binding Authors}" MaxWidth="300" />
-                <DataGridTextColumn Header="Date de Publication" Binding="{Binding PublishedDate}" />
+                <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>-->
+                <DataGridTextColumn Header="Google Id" Binding="{Binding GoogleId}" MaxWidth="200" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Titre" Binding="{Binding Title}" MaxWidth="300"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Auteurs" Binding="{Binding Authors}" MaxWidth="300"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Date de Publication" Binding="{Binding PublishedDate}"  IsReadOnly="True"/>
                 <!--<DataGridTextColumn Header="Description" Binding="{Binding Description}" MaxWidth="400" />-->
-                <DataGridTemplateColumn Header="Description" MaxWidth="400">
+                <DataGridTemplateColumn Header="Description" MaxWidth="400" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" TextAlignment="Justify"></TextBlock>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+                                <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" TextAlignment="Justify"></TextBlock>
+                            </ScrollViewer>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="ISBN_10" Binding="{Binding ISBN_10}" />
-                <DataGridTextColumn Header="ISBN_13" Binding="{Binding ISBN_13}" />
-                <DataGridTemplateColumn Header="Image" Width="200">
+                <DataGridTextColumn Header="ISBN_10" Binding="{Binding ISBN_10}"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="ISBN_13" Binding="{Binding ISBN_13}"  IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Image" Width="200" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Source="{Binding ImagePath}" Stretch="Uniform" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -49,5 +52,23 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
+            <Button Command="{Binding GoBackCommand}" HorizontalAlignment="Right">
+                <TextBlock 
+            Style="{StaticResource PageTitleStyle}"
+            Margin="{StaticResource MediumLeftMargin}"
+            Text="Annuler"
+                TextWrapping="Wrap"
+                TextAlignment="Justify"/>
+            </Button>
+            <Button Command="{Binding GoogleReconcileCommand}" HorizontalAlignment="Right">
+                <TextBlock 
+            Style="{StaticResource PageTitleStyle}"
+            Margin="{StaticResource MediumLeftMargin}"
+            Text="Réconcilier avec le Livre sélectionné"
+                TextWrapping="Wrap"
+                TextAlignment="Justify"/>
+            </Button>
+        </StackPanel>
     </Grid>
 </Page>

@@ -23,11 +23,13 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
     private ICommand _OverrideImgCommand;
     private ICommand _SaveCommand;
     private ICommand _GoogleSearchCommand;
+    private ICommand _ChangeImgCommand;
     //private ICommand _SaveCommand;
     public ICommand LoadImgCommand => _LoadImgCommand ?? (_LoadImgCommand = new RelayCommand(LoadImg));
     public ICommand OverrideImgCommand => _OverrideImgCommand ?? (_OverrideImgCommand = new RelayCommand(OverrideImg));
     public ICommand SaveCommand => _SaveCommand ?? (_SaveCommand = new RelayCommand<IObsToShow>(Save));
     public ICommand GoogleSearchCommand => _GoogleSearchCommand ?? (_GoogleSearchCommand = new RelayCommand(GoogleSearch));
+    public ICommand ChangeImgCommand => _ChangeImgCommand ?? (_ChangeImgCommand = new RelayCommand(ChangeImg));
 
 
     private ObsTome _item;
@@ -36,6 +38,12 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
     {
         get { return _item; }
         set { SetProperty(ref _item, value); }
+    }
+    private string _fanartTmpPath;
+    public string FanartTmpPath
+    {
+        get { return _fanartTmpPath; }
+        set { SetProperty(ref _fanartTmpPath, value); }
     }
     public TomeListDetailViewModel(IPublicationAPIClient publicationService, DialogService dialogService, ITomeAPIClient tomeService, ICoverExtractor coverExtractor, INavigationService navigationService)
     {
@@ -46,6 +54,10 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
         _navigationService = navigationService;
     }
 
+    private void ChangeImg()
+    {
+        FanartTmpPath = _dialogService.ImgFilePicker();
+    }
     public async void OnNavigatedTo(object parameter)
     {
         await InitValue(parameter);
@@ -55,6 +67,7 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
         if (parameter is int ID)
         {
             Item = new ObsTome(await _tomeService.GetTomeByID(ID));
+            FanartTmpPath = Item.Illustration;
         }
     }
     private void GoogleSearch()
@@ -80,7 +93,10 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
             var url = Path.Combine($"http://192.168.1.17:800{Item.FilePath}");
             client.DownloadFile(url, tmpfile);
             var tmpcover = _coverExtractor.GetCoverStream(tmpfile);
-            var result = await _tomeService.PostCoverTome(tmpcover, Item.Id, Item.PublicationId);
+            if (tmpcover != null)
+            {
+                var result = await _tomeService.PostCoverTome(tmpcover, Item.Id, Item.PublicationId); 
+            }
             //File.Delete(tmpfile);
             //File.Delete(tmpcover);
         }
@@ -89,6 +105,12 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
     }
     private async void Save(IObsToShow obj)
     {
+        if (FanartTmpPath != Item.Illustration)
+        {
+                var result = await _tomeService.PostCoverTome(FanartTmpPath, Item.Id, Item.PublicationId);
+                var coverpath = Path.Combine("uploads", "Tome", Item.PublicationId.ToString(), "Cover", $"{Item.Id}.jpg");
+                Item.CoverPath = coverpath;
+        }
         var resultput = await _tomeService.PutTome(Item.Tome);
         _dialogService.ShowInfo(resultput);
     }

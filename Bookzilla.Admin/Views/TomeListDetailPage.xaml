@@ -19,15 +19,17 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid
-                        Width="400"
-                        Height="600"
+                        Width="666"
+                        Height="1000"
                         Grid.Column="0"
                         Grid.Row="0"
                         Grid.RowSpan="3"
                         Background="{DynamicResource MahApps.Brushes.Gray10}"
                         VerticalAlignment="Top">
-                            <Image Source="{Binding Item.Illustration,Mode=OneWay}" Stretch="Fill" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                            </Image>
+                        <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Command="{Binding ChangeImgCommand}">
+                        <Image Source="{Binding FanartTmpPath,Mode=OneWay}" Stretch="Uniform" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        </Image>
+                        </Button>
                     </Grid>
                     <StackPanel
                         Grid.Column="1"
@@ -57,6 +59,21 @@
                         </StackPanel>
                         <StackPanel
                             Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Auteur(s)" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.Auteur}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Date de Publication" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.PublicationDate}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Description" />
+                            <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.Description}" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="{StaticResource SmallLeftTopMargin}">
                             <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Page Actuelle" />
                             <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.CurrentPage}" />
                         </StackPanel>
@@ -75,34 +92,64 @@
                             <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Chemin de l'Image" />
                             <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.CoverPath}" />
                         </StackPanel>
-                        <StackPanel
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0"
                             Margin="{StaticResource SmallLeftTopMargin}">
-                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
+                                <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="Id sur Google Livre" />
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.GoogleBookId}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1"
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                                <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="ISBN_10" />
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.ISBN_10}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2"
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                                <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="ISBN_13" />
+                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="{Binding Item.ISBN_13}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0"
+                            Margin="{StaticResource SmallLeftTopMargin}">
+                                <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
                                 Command="{Binding SaveCommand}">
-                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Enregistrer Les Changements" />
-                            </Button>
-                        </StackPanel>
-                        <StackPanel
+                                    <TextBlock Style="{StaticResource BodyTextStyle}" Text="Enregistrer Les Changements" />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1"
                             Margin="{StaticResource SmallLeftTopMargin}">
-                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
+                                <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
                                 Command="{Binding LoadImgCommand}">
-                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Extraire la Cover" />
-                            </Button>
-                        </StackPanel>
-                        <StackPanel
+                                    <TextBlock Style="{StaticResource BodyTextStyle}" Text="Extraire la Cover" />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2"
                             Margin="{StaticResource SmallLeftTopMargin}">
-                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left" IsEnabled="{Binding Item.CanOverridePubliCover}"
+                                <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left" IsEnabled="{Binding Item.CanOverridePubliCover}"
                                 Command="{Binding OverrideImgCommand}">
-                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Utiliser la Cover pour la publication" />
-                            </Button>
-                        </StackPanel>
-                        <StackPanel
+                                    <TextBlock Style="{StaticResource BodyTextStyle}" Text="Utiliser la Cover pour la publication" />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3"
                             Margin="{StaticResource SmallLeftTopMargin}">
-                            <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
+                                <Button Style="{StaticResource MahApps.Styles.Button.Flat}" Width="300" HorizontalAlignment="Left"
                                 Command="{Binding GoogleSearchCommand}">
-                                <TextBlock Style="{StaticResource BodyTextStyle}" Text="Rechercher des Infos sur Google Book" />
-                            </Button>
-                        </StackPanel>
+                                    <TextBlock Style="{StaticResource BodyTextStyle}" Text="Rechercher des Infos sur Google Book" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Grid>
 

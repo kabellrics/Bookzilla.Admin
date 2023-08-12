@@ -53,7 +53,8 @@ namespace Bookzilla.Admin.Core.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return null;
             }
         }
         private string GetCoverFromCBR(string path)
@@ -80,7 +81,8 @@ namespace Bookzilla.Admin.Core.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                //throw ex;
+                return null;
             }
         }
     }
