@@ -1,4 +1,7 @@
-﻿using Bookzilla.Admin.Dialogs.AddCollectionDialog;
+﻿using Bookzilla.Admin.Core.Models.GoogleBook;
+using Bookzilla.Admin.Dialogs.AddCollectionDialog;
+using Bookzilla.Admin.Dialogs.BookReconcileDialog;
+using Bookzilla.Admin.Dialogs.BookSearchDiaolg;
 using Bookzilla.Admin.Dialogs.InfoDialog;
 using Bookzilla.Admin.ViewModels.ObservableObj;
 using Microsoft.Win32;
@@ -39,6 +42,28 @@ namespace Bookzilla.Admin.Dialogs.DialogService
         {
             DialogWindow dialog = new DialogWindow();
             var vm = new AddCollectionViewModel(Source);
+            dialog.DataContext = vm;
+            if (dialog.ShowDialog().Value)
+            {
+                return vm.Item;
+            }
+            return null;
+        }
+        public GoogleBook SearchBookInfo(ObsTome tome)
+        {
+            DialogWindow dialog = new DialogWindow();
+            var vm = new BookSearchDialogViewModel(tome);
+            dialog.DataContext = vm;
+            if(dialog.ShowDialog().Value)
+            {
+                return vm.Selectedbook;
+            }
+            return null;
+        }
+        public ObsTome ReconcileBookInfo(ObsTome tome, GoogleBook book)
+        {
+            DialogWindow dialog = new DialogWindow();
+            var vm = new BookReconcileDialogViewModel(book, tome);
             dialog.DataContext = vm;
             if (dialog.ShowDialog().Value)
             {

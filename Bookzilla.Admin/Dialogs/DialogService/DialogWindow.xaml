@@ -6,15 +6,23 @@
         xmlns:local="clr-namespace:Bookzilla.Admin.Dialogs.DialogService"
         xmlns:AddCollection="clr-namespace:Bookzilla.Admin.Dialogs.AddCollectionDialog"
         xmlns:InfoDialog="clr-namespace:Bookzilla.Admin.Dialogs.InfoDialog"
+        xmlns:SearchBook="clr-namespace:Bookzilla.Admin.Dialogs.BookSearchDiaolg"
+        xmlns:ReconcileBook="clr-namespace:Bookzilla.Admin.Dialogs.BookReconcileDialog"
         mc:Ignorable="d"
         Title="DialogWindow"  SizeToContent="WidthAndHeight"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <DataTemplate DataType="{x:Type AddCollection:AddCollectionViewModel}">
             <AddCollection:AddCollectionView></AddCollection:AddCollectionView>
         </DataTemplate>
         <DataTemplate DataType="{x:Type InfoDialog:InfoViewModel}">
             <InfoDialog:InfoDialog></InfoDialog:InfoDialog>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type SearchBook:BookSearchDialogViewModel}">
+            <SearchBook:BookSearchDialog></SearchBook:BookSearchDialog>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ReconcileBook:BookReconcileDialogViewModel}">
+            <ReconcileBook:BookReconcileDialog></ReconcileBook:BookReconcileDialog>
         </DataTemplate>
     </Window.Resources>
     <Grid>

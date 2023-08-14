@@ -35,10 +35,10 @@
                         Grid.Column="1"
                         Grid.Row="0"
                         Margin="5">
-                        <TextBlock
+                        <TextBox
                             Margin="{StaticResource SmallLeftMargin}"
-                            Style="{StaticResource PageTitleStyle}"
-                            Text="{Binding Item.Name}"
+                            Style="{StaticResource MahApps.Styles.TextBox.ComboBox.Editable}"
+                            Text="{Binding Item.Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                             HorizontalAlignment="Center"
                             FontSize="50"/>
                         <StackPanel

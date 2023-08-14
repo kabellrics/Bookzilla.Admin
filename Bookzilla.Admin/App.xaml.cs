@@ -39,7 +39,7 @@ public partial class App : Application
     public App()
     {
     }
-
+    public new static App Current => (App)Application.Current;
     private async void OnStartup(object sender, StartupEventArgs e)
     {
         // https://docs.microsoft.com/windows/apps/design/shell/tiles-and-notifications/send-local-toast?tabs=desktop

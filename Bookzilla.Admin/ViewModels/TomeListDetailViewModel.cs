@@ -72,7 +72,17 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
     }
     private void GoogleSearch()
     {
-        _navigationService.NavigateTo(typeof(TomeGoogleSynchroSearchViewModel).FullName, Item);
+        //_navigationService.NavigateTo(typeof(TomeGoogleSynchroSearchViewModel).FullName, Item);
+        var selectedbook = _dialogService.SearchBookInfo(Item);
+        if(selectedbook != null)
+        {
+            var updatedItem = _dialogService.ReconcileBookInfo(Item, selectedbook);
+            if(updatedItem != null)
+            {
+                Item = updatedItem;
+                _dialogService.ShowInfo("Tome mis à jour");
+            }
+        }
     }
     public void OnNavigatedFrom()
     {
