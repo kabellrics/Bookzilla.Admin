@@ -69,7 +69,7 @@ public class CollectionListViewModel : ObservableObject, INavigationAware
         var newObj = _dialogService.AddCollection(ParentPathList);
         var newitem = new CreateCollection() { ParentId = newObj.Id, Name = newObj.Name };
         var result = await _collectionService.PostCollection(newitem);
-        _dialogService.ShowInfo(result);
+        _dialogService.ShowInfo( result);
         await InitiateList();
     }
 

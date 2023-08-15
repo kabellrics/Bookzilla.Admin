@@ -1,20 +1,31 @@
-﻿using Bookzilla.Admin.Core.Models.GoogleBook;
+﻿using Bookzilla.Admin.Contracts.Services;
+using Bookzilla.Admin.Core.Models.GoogleBook;
 using Bookzilla.Admin.Dialogs.AddCollectionDialog;
 using Bookzilla.Admin.Dialogs.BookReconcileDialog;
 using Bookzilla.Admin.Dialogs.BookSearchDiaolg;
 using Bookzilla.Admin.Dialogs.InfoDialog;
 using Bookzilla.Admin.ViewModels.ObservableObj;
+using CommunityToolkit.WinUI.Notifications;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
+using Windows.UI.Notifications;
 
 namespace Bookzilla.Admin.Dialogs.DialogService
 {
     public class DialogService
     {
+        private readonly IToastNotificationsService _notificationsService;
+
+        public DialogService(IToastNotificationsService notificationsService)
+        {
+            _notificationsService = notificationsService;
+        }
+
         public DialogResult OpenDialog()
         {
             DialogWindow win = new DialogWindow();
@@ -71,12 +82,53 @@ namespace Bookzilla.Admin.Dialogs.DialogService
             }
             return null;
         }
-        public void ShowInfo(String Source) 
+        public void ShowInfo(String Source)
         {
-            DialogWindow dialog = new DialogWindow();
-            var vm = new InfoViewModel(Source);
-            dialog.DataContext = vm;
-            dialog.ShowDialog();
+            var content = new ToastContent()
+            {
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                    {
+                        new AdaptiveText()
+                        {
+                            Text = "Bookzilla Info"
+                        },
+
+                        new AdaptiveText()
+                        {
+                             Text = Source
+                        }
+                    }
+                    }
+                },
+                Actions = new ToastActionsCustom()
+                {
+                    Buttons =
+                {
+                    // More about Toast Buttons at https://docs.microsoft.com/dotnet/api/communitytoolkit.winui.notifications.toastbutton
+                    //new ToastButton("OK", "ToastButtonActivationArguments")
+                    //{
+                    //    ActivationType = ToastActivationType.Foreground
+                    //},
+
+                    new ToastButtonDismiss("Ok")
+                }
+                }
+            };
+            var doc = new XmlDocument();
+            doc.LoadXml(content.GetContent());
+            var toast = new ToastNotification(doc)
+            {
+                Tag = Guid.NewGuid().ToString() // "ToastTag"
+            };
+            _notificationsService.ShowToastNotification(toast);
+            //DialogWindow dialog = new DialogWindow();
+            //var vm = new InfoViewModel(Source);
+            //dialog.DataContext = vm;
+            //dialog.ShowDialog();
         }
     }
 }

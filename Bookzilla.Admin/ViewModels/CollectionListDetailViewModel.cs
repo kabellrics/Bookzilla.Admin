@@ -119,7 +119,7 @@ public class CollectionListDetailViewModel : ObservableObject, INavigationAware
         Directory.CreateDirectory(FolderTmp);
         File.Copy(FanartTmpPath, Path.Combine(FolderTmp, filename));
         result = await _collectionService.PostCoverCollection(Path.Combine(FolderTmp, filename));
-        _dialogService.ShowInfo(result);
+        _dialogService.ShowInfo( result);
         File.Delete(Path.Combine(FolderTmp, filename));
     }
 }

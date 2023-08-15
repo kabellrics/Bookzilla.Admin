@@ -9,7 +9,7 @@
         xmlns:SearchBook="clr-namespace:Bookzilla.Admin.Dialogs.BookSearchDiaolg"
         xmlns:ReconcileBook="clr-namespace:Bookzilla.Admin.Dialogs.BookReconcileDialog"
         mc:Ignorable="d"
-        Title="DialogWindow"  SizeToContent="WidthAndHeight"
+        Title="DialogWindow" WindowState="Maximized"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <DataTemplate DataType="{x:Type AddCollection:AddCollectionViewModel}">
