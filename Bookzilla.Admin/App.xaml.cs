@@ -9,6 +9,7 @@ using Bookzilla.Admin.Contracts.Services;
 using Bookzilla.Admin.Contracts.Views;
 using Bookzilla.Admin.Core.Contracts.Services;
 using Bookzilla.Admin.Core.Services;
+using Bookzilla.Admin.Core.Store;
 using Bookzilla.Admin.Dialogs.DialogService;
 using Bookzilla.Admin.Models;
 using Bookzilla.Admin.Services;
@@ -99,6 +100,9 @@ public partial class App : Application
         services.AddSingleton<ICollectionAPIClient, CollectionAPIClient>();
         services.AddSingleton<IPublicationAPIClient, PublicationAPIClient>();
         services.AddSingleton<ITomeAPIClient, TomeAPIClient>();
+        services.AddSingleton<IStorePublication, StorePublication>();
+        services.AddSingleton<IStoreCollection, StoreCollection>();
+        services.AddSingleton<IStoreTome, StoreTome>();
         services.AddSingleton<IParamAPIClient, ParamAPIClient>();
         services.AddSingleton<IGoogleBookAPIClient, GoogleBookAPIClient>();
         services.AddSingleton<ICoverExtractor, CoverExtractor>();

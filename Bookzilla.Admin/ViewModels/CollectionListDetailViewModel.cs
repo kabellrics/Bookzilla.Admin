@@ -15,8 +15,8 @@ namespace Bookzilla.Admin.ViewModels;
 public class CollectionListDetailViewModel : ObservableObject, INavigationAware
 {
     private readonly INavigationService _navigationService;
-    private readonly ICollectionAPIClient _collectionService;
-    private readonly IPublicationAPIClient _publicationService;
+    private readonly IStoreCollection _collectionService;
+    private readonly IStorePublication _publicationService;
     private readonly DialogService _dialogService;
     private ICommand _navigateToDetailCommand;
     private ICommand _ChangeImgCommand;
@@ -47,7 +47,7 @@ public class CollectionListDetailViewModel : ObservableObject, INavigationAware
     public ObservableCollection<ObsCollection> ChildsCollections { get; } = new ObservableCollection<ObsCollection>();
     public ObservableCollection<ObsPublication> ChildsPublications { get; } = new ObservableCollection<ObsPublication>();
     public ObservableCollection<IObsToShow> Childs { get; } = new ObservableCollection<IObsToShow>();
-    public CollectionListDetailViewModel(ICollectionAPIClient collectionService, IPublicationAPIClient publicationService, INavigationService navigationService, DialogService dialogService)
+    public CollectionListDetailViewModel(IStoreCollection collectionService, IStorePublication publicationService, INavigationService navigationService, DialogService dialogService)
     {
         _collectionService = collectionService;
         _publicationService = publicationService;
@@ -61,27 +61,43 @@ public class CollectionListDetailViewModel : ObservableObject, INavigationAware
         {
             Item = new ObsCollection(await _collectionService.GetCollectionByID(ID));
             FanartTmpPath = Item.Illustration;
-            var datacollection = await _collectionService.GetCollectionsByParentID(ID);
-            if (datacollection != null)
+            await foreach(var item in _collectionService.GetCollectionsByParentID(ID))
             {
-                foreach (var item in datacollection)
-                {
-                    var obsitem = new ObsCollection(item);
-                    ChildsCollections.Add(obsitem);
-                    Childs.Add(obsitem);
-                } 
+                var obsitem = new ObsCollection(item);
+                ChildsCollections.Add(obsitem);
+                Childs.Add(obsitem);
             }
-            var datapublication = await _publicationService.GetPublicationsByParentID(ID);
-            if (datapublication != null)
+            #region old
+            //var datacollection = await _collectionService.GetCollectionsByParentID(ID);
+            //if (datacollection != null)
+            //{
+            //    foreach (var item in datacollection)
+            //    {
+            //        var obsitem = new ObsCollection(item);
+            //        ChildsCollections.Add(obsitem);
+            //        Childs.Add(obsitem);
+            //    } 
+            //} 
+            #endregion
+            await foreach(var item in _publicationService.GetPublicationsByParentID(ID))
             {
-                foreach (var item in datapublication)
-                {
-                    var obsitem = new ObsPublication(item);
-                    ChildsPublications.Add(obsitem);
-                    Childs.Add(obsitem);
-                }
+                var obsitem = new ObsPublication(item);
+                ChildsPublications.Add(obsitem);
+                Childs.Add(obsitem);
             }
-            var dataallcollection = await _collectionService.GetCollections();
+            #region old
+            //var datapublication = await _publicationService.GetPublicationsByParentID(ID);
+            //if (datapublication != null)
+            //{
+            //    foreach (var item in datapublication)
+            //    {
+            //        var obsitem = new ObsPublication(item);
+            //        ChildsPublications.Add(obsitem);
+            //        Childs.Add(obsitem);
+            //    }
+            //} 
+            #endregion
+            var dataallcollection = _collectionService.GetCollections();
             Hierarchie = GetFather(Item.Collection, dataallcollection);
         }
     }

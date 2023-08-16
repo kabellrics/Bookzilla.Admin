@@ -15,8 +15,8 @@ namespace Bookzilla.Admin.ViewModels;
 public class PublicationListViewModel : ObservableObject, INavigationAware
 {
     private readonly INavigationService _navigationService;
-    private readonly IPublicationAPIClient _publicationService;
-    private readonly ICollectionAPIClient _collectionService;
+    private readonly IStorePublication _publicationService;
+    private readonly IStoreCollection _collectionService;
     private readonly DialogService _dialogService;
     private ICommand _navigateToDetailCommand;
     private ICommand _navigateToCreateCommand;
@@ -26,7 +26,7 @@ public class PublicationListViewModel : ObservableObject, INavigationAware
 
     public ObservableCollection<ObsPublication> Source { get; } = new ObservableCollection<ObsPublication>();
 
-    public PublicationListViewModel(ICollectionAPIClient collectionService, IPublicationAPIClient publicationService, INavigationService navigationService, DialogService dialogService)
+    public PublicationListViewModel(IStoreCollection collectionService, IStorePublication publicationService, INavigationService navigationService, DialogService dialogService)
     {
         _collectionService = collectionService;
         _publicationService = publicationService;
@@ -45,8 +45,7 @@ public class PublicationListViewModel : ObservableObject, INavigationAware
 
         // Replace this with your actual data
         //var data = await _sampleDataService.GetContentGridDataAsync();
-        var datapublication = await _publicationService.GetPublications();
-        foreach (var item in datapublication)
+        await foreach (var item in _publicationService.GetPublicationsAsync())
         {
             Source.Add(new ObsPublication(item));
         }
@@ -63,7 +62,7 @@ public class PublicationListViewModel : ObservableObject, INavigationAware
     private async void NavigateToCreate()
     {
         var ParentPathList = new List<KeyValuePair<int, String>>();
-        var datacollection = await _collectionService.GetCollections();
+        var datacollection = _collectionService.GetCollections();
         foreach (var item in datacollection)
         {
             ParentPathList.Add(new KeyValuePair<int, String>(item.Id, GetFather(item, datacollection)));

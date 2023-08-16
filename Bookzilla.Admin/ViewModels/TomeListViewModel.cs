@@ -14,14 +14,14 @@ namespace Bookzilla.Admin.ViewModels;
 public class TomeListViewModel : ObservableObject, INavigationAware
 {
     private readonly INavigationService _navigationService;
-    private readonly ITomeAPIClient _tomeService;
+    private readonly IStoreTome _tomeService;
     private ICommand _navigateToDetailCommand;
 
     public ICommand NavigateToDetailCommand => _navigateToDetailCommand ?? (_navigateToDetailCommand = new RelayCommand<ObsTome>(NavigateToDetail));
 
     public ObservableCollection<ObsTome> Source { get; } = new ObservableCollection<ObsTome>();
 
-    public TomeListViewModel(ITomeAPIClient tomeService, INavigationService navigationService)
+    public TomeListViewModel(IStoreTome tomeService, INavigationService navigationService)
     {
         _tomeService = tomeService;
         _navigationService = navigationService;
@@ -37,20 +37,14 @@ public class TomeListViewModel : ObservableObject, INavigationAware
 
         // Replace this with your actual data
         //var data = await _sampleDataService.GetContentGridDataAsync();
-        var datapublication = await _tomeService.GetTomes();
-        await foreach (var item in GetTomes(datapublication.OrderBy(x => x.PublicationId).ThenBy(x => x.OrderInPublication)))
+        await foreach (var item in _tomeService.GetTomesAsync())
         {
-            Source.Add(item);
+            Source.Add(new ObsTome(item));
         }
     }
 
     public void OnNavigatedFrom()
     {
-    }
-    private async IAsyncEnumerable<ObsTome> GetTomes(IEnumerable<Tome> tomes)
-    {
-        foreach (var tome in tomes)
-            yield return new ObsTome(tome);
     }
     private void NavigateToDetail(ObsTome order)
     {

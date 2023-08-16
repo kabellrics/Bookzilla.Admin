@@ -13,8 +13,8 @@ namespace Bookzilla.Admin.ViewModels;
 public class MainViewModel : ObservableObject, INavigationAware
 {
     private readonly INavigationService _navigationService;
-    private readonly ITomeAPIClient _tomeService;
-    private readonly IPublicationAPIClient _publicationService;
+    private readonly IStoreTome _tomeService;
+    private readonly IStorePublication _publicationService;
     private ICommand _navigateToPubliDetailCommand;
     private ICommand _navigateToTomeDetailCommand;
     public ICommand NavigateToDetailPubliCommand => _navigateToPubliDetailCommand ?? (_navigateToPubliDetailCommand = new RelayCommand<ObsPublication>(NavigateToDetailPubli));
@@ -25,7 +25,7 @@ public class MainViewModel : ObservableObject, INavigationAware
     public ObservableCollection<ObsTome> ReadingTome { get; } = new ObservableCollection<ObsTome>();
 
 
-    public MainViewModel(ITomeAPIClient tomeService, IPublicationAPIClient publicationService, INavigationService navigationService)
+    public MainViewModel(IStoreTome tomeService, IStorePublication publicationService, INavigationService navigationService)
     {
         _tomeService = tomeService;
         _publicationService = publicationService;
@@ -60,40 +60,28 @@ public class MainViewModel : ObservableObject, INavigationAware
     private async Task InitReadingTome()
     {
         ReadingTome.Clear();
-        var datapublication = await _tomeService.GetTomes();
-        await foreach (var item in GetTomes(datapublication.Where(x => x.ReadingStatusId == 2).OrderBy(x=> Guid.NewGuid()).Take(10)))
+        await foreach (var item in _tomeService.GetCurrentReadTomesAsync())
         {
-            ReadingTome.Add(item);
+            ReadingTome.Add(new ObsTome(item));
         }
     }
 
     private async Task InitFavTome()
     {
         FavTome.Clear();
-        var datapublication = await _tomeService.GetTomes();
-        await foreach (var item in GetTomes(datapublication.Where(x=>x.IsFavorite == "1").OrderBy(x => Guid.NewGuid()).Take(10)))
+        await foreach (var item in _tomeService.GetFavTomesAsync())
         {
-            FavTome.Add(item);
+            FavTome.Add(new ObsTome(item));
         }
     }
 
     private async Task InitFavPublication()
     {
         FavPublication.Clear();
-        var datapublication = await _publicationService.GetPublications();
-        await foreach (var item in GetPublications(datapublication.Where(x => x.IsFavorite == "1").OrderBy(x => Guid.NewGuid()).Take(10)))
+        await foreach (var item in _publicationService.GetFavPublicationsAsync())
         {
-            FavPublication.Add(item);
+            FavPublication.Add(new ObsPublication(item));
         }
     }
-    private async IAsyncEnumerable<ObsTome> GetTomes(IEnumerable<Tome> tomes)
-    {
-        foreach (var tome in tomes)
-            yield return new ObsTome(tome);
-    }
-    private async IAsyncEnumerable<ObsPublication> GetPublications(IEnumerable<Publication> publications)
-    {
-        foreach (var publication in publications)
-            yield return new ObsPublication(publication);
-    }
+
 }

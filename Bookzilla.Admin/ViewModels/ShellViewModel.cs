@@ -40,7 +40,7 @@ public class ShellViewModel : ObservableObject
         new HamburgerMenuGlyphItem() { Label = Resources.ShellMainPage, Glyph = "\uE8A5", TargetPageType = typeof(MainViewModel) },
         new HamburgerMenuGlyphItem() { Label = Resources.ShellCollectionListPage, Glyph = "\uE8A5", TargetPageType = typeof(CollectionListViewModel) },
         new HamburgerMenuGlyphItem() { Label = Resources.ShellPublicationListPage, Glyph = "\uE8A5", TargetPageType = typeof(PublicationListViewModel) },
-        new HamburgerMenuGlyphItem() { Label = Resources.ShellTomeListPage, Glyph = "\uE8A5", TargetPageType = typeof(TomeListViewModel) },
+        //new HamburgerMenuGlyphItem() { Label = Resources.ShellTomeListPage, Glyph = "\uE8A5", TargetPageType = typeof(TomeListViewModel) },
         //new HamburgerMenuGlyphItem() { Label = Resources.ShellCollectionDetailPage, Glyph = "\uE8A5", TargetPageType = typeof(CollectionDetailViewModel) },
         //new HamburgerMenuGlyphItem() { Label = Resources.ShellPublicationDetailPage, Glyph = "\uE8A5", TargetPageType = typeof(PublicationDetailViewModel) },
         //new HamburgerMenuGlyphItem() { Label = Resources.ShellTomeDetailPage, Glyph = "\uE8A5", TargetPageType = typeof(TomeDetailViewModel) },

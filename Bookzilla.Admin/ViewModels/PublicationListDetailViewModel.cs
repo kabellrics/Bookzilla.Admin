@@ -21,11 +21,11 @@ namespace Bookzilla.Admin.ViewModels;
 
 public class PublicationListDetailViewModel : ObservableObject, INavigationAware
 {
-    private readonly IPublicationAPIClient _publicationService;
-    private readonly ICollectionAPIClient _collectionService;
+    private readonly IStorePublication _publicationService;
+    private readonly IStoreCollection _collectionService;
     private readonly INavigationService _navigationService;
     private readonly ICoverExtractor _coverExtractor;
-    private readonly ITomeAPIClient _tomeService;
+    private readonly IStoreTome _tomeService;
     private readonly DialogService _dialogService;
     private ICommand _ChangeImgCommand;
     private ICommand _SaveCommand;
@@ -60,7 +60,7 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
     }
     public ObservableCollection<ObsTome> Childs { get; } = new ObservableCollection<ObsTome>();
 
-    public PublicationListDetailViewModel(ICollectionAPIClient collectionService, INavigationService navigationService, IPublicationAPIClient publicationService, DialogService dialogService, ITomeAPIClient tomeService, ICoverExtractor coverExtractor)
+    public PublicationListDetailViewModel(IStoreCollection collectionService, INavigationService navigationService, IStorePublication publicationService, DialogService dialogService, IStoreTome tomeService, ICoverExtractor coverExtractor)
     {
         _collectionService = collectionService;
         _publicationService = publicationService;
@@ -83,15 +83,11 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
             Item = new ObsPublication(await _publicationService.GetPublicationByID(ID));
             FanartTmpPath = Item.Illustration;
             var fathercollection = await _collectionService.GetCollectionByID(Item.CollectionId);
-            var dataallcollection = await _collectionService.GetCollections();
+            var dataallcollection = _collectionService.GetCollections();
             Hierarchie = GetFather(fathercollection, dataallcollection);
-            var childs = await _tomeService.GetTomesByParentID(ID);
-            if (childs != null)
+            await foreach (var item in _tomeService.GetTomesByParentID(ID))
             {
-                foreach (var item in childs)
-                {
-                    Childs.Add(new ObsTome(item));
-                } 
+                Childs.Add(new ObsTome(item));
             }
         }
     }
@@ -141,13 +137,13 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
     {
         var files = _dialogService.FileFilePicker();
         var ind = GetStartingRank();
-        foreach ( var file in files)
+        foreach (var file in files)
         {
-            var isEpub = Path.GetExtension(file) == ".epub" ? "1":"0"; 
-            var tome = new CreateTome(new Tome() { OrderInPublication = ind, PublicationId = Item.Id, Name = Path.GetFileNameWithoutExtension(file),IsEpub = isEpub });
-            var t = Task.Run(async ()=> await SendFile(file, tome));
+            var isEpub = Path.GetExtension(file) == ".epub" ? "1" : "0";
+            var tome = new CreateTome(new Tome() { OrderInPublication = ind, PublicationId = Item.Id, Name = Path.GetFileNameWithoutExtension(file), IsEpub = isEpub });
+            var t = Task.Run(async () => await SendFile(file, tome));
             var result = await Task.WhenAll(t);
-            if(!result[0].Contains("successfully"))
+            if (!result[0].Contains("successfully"))
                 _dialogService.ShowInfo(result[0]);
             ind++;
         }
@@ -156,7 +152,7 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
     }
     private async void ExtractCovers()
     {
-        foreach(var item in Childs)
+        foreach (var item in Childs)
         {
             var t = Task.Run(async () => await LoadCover(item));
             var result = await Task.WhenAll(t);//.ContinueWith(x=> 
@@ -176,7 +172,7 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
         {
             var ext = Path.GetExtension(item.FilePath);
             Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp"));
-            var tmpfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla","temp", $"{Guid.NewGuid()}{ext}");
+            var tmpfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bookzilla", "temp", $"{Guid.NewGuid()}{ext}");
             var url = Path.Combine($"http://192.168.1.17:800{item.FilePath}");
             //client.(url, tmpfile);
             var response = await client.GetAsync(url);
@@ -189,7 +185,7 @@ public class PublicationListDetailViewModel : ObservableObject, INavigationAware
             var tmpcover = _coverExtractor.GetCoverStream(tmpfile);
             if (tmpcover != null)
             {
-                return await _tomeService.PostCoverTome(tmpcover, item.Id, item.PublicationId); 
+                return await _tomeService.PostCoverTome(tmpcover, item.Id, item.PublicationId);
             }
             return null;
         }

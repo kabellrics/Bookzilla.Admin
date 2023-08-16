@@ -14,9 +14,9 @@ namespace Bookzilla.Admin.ViewModels;
 
 public class TomeListDetailViewModel : ObservableObject, INavigationAware
 {
-    private readonly ITomeAPIClient _tomeService;
+    private readonly IStoreTome _tomeService;
     private readonly DialogService _dialogService;
-    private readonly IPublicationAPIClient _publicationService;
+    private readonly IStorePublication _publicationService;
     private readonly ICoverExtractor _coverExtractor;
     private readonly INavigationService _navigationService;
     private ICommand _LoadImgCommand;
@@ -45,7 +45,7 @@ public class TomeListDetailViewModel : ObservableObject, INavigationAware
         get { return _fanartTmpPath; }
         set { SetProperty(ref _fanartTmpPath, value); }
     }
-    public TomeListDetailViewModel(IPublicationAPIClient publicationService, DialogService dialogService, ITomeAPIClient tomeService, ICoverExtractor coverExtractor, INavigationService navigationService)
+    public TomeListDetailViewModel(IStorePublication publicationService, DialogService dialogService, IStoreTome tomeService, ICoverExtractor coverExtractor, INavigationService navigationService)
     {
         _publicationService = publicationService;
         _tomeService = tomeService;

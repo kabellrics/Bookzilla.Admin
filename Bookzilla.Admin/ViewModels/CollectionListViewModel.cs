@@ -16,7 +16,7 @@ namespace Bookzilla.Admin.ViewModels;
 public class CollectionListViewModel : ObservableObject, INavigationAware
 {
     private readonly INavigationService _navigationService;
-    private readonly ICollectionAPIClient _collectionService;
+    private readonly IStoreCollection _collectionService;
     private readonly DialogService _dialogService;
     private ICommand _navigateToDetailCommand;
     private ICommand _navigateToCreateCommand;
@@ -25,7 +25,7 @@ public class CollectionListViewModel : ObservableObject, INavigationAware
 
     public ObservableCollection<ObsCollection> Source { get; } = new ObservableCollection<ObsCollection>();
 
-    public CollectionListViewModel(ICollectionAPIClient collectionService, INavigationService navigationService, DialogService dialogService)
+    public CollectionListViewModel(IStoreCollection collectionService, INavigationService navigationService, DialogService dialogService)
     {
         _collectionService = collectionService;
         _navigationService = navigationService;
@@ -43,8 +43,7 @@ public class CollectionListViewModel : ObservableObject, INavigationAware
 
         // Replace this with your actual data
         //var data = await _sampleDataService.GetContentGridDataAsync();
-        var datacollection = await _collectionService.GetCollections();
-        foreach (var item in datacollection)
+        await foreach(var item in _collectionService.GetCollectionsAsync())
         {
             Source.Add(new ObsCollection(item));
         }
